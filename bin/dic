@@ -1,0 +1,37 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# s-han.lee@samsung.com
+# daum dictionary --pretty
+
+MAX_COUNT = 16
+
+def printBuffer(d):
+	word = d['rq']
+	items = d['items'] + d['r_items']
+	if items:
+		for i, line in enumerate(items):
+			if i >= MAX_COUNT:
+				break
+			print line[7:]
+	else:
+		print "cannot found " + word
+
+def daumDict(word):
+	import urllib2
+	url = "http://sug.dic.daum.net/dic_all_ctsuggest?mod=json&code=utf_in_out&enc=utf&cate=eng&q=" + word + "&callback=printBuffer"
+	try:
+		json = urllib2.urlopen(url).read()
+	except:
+		print "load webpage fail. check your internet connection."
+		return
+	eval(json[:-2].replace('|',' > ')) 
+
+
+import sys
+import getopt
+if __name__ == "__main__":
+    if len(sys.argv) is 1:
+        print "insucfficient args"
+        sys.exit(1)
+    word = sys.argv[1]
+    daumDict( word )
